@@ -7,12 +7,18 @@
 //
 
 #include <stdio.h>
+#include "lists.h"
 
 int main(int argc, const char * argv[])
 {
-
-    // insert code here...
-    printf("Hello, World!\n");
+    List *list = NULL;
+    
+    AddNode(&list, "aaa");
+    AddNode(&list, "aab");
+    AddNode(&list, "aca");
+    DeleteNode(list, "acab");
+    PrintList(list);
+    ReleaseList(&list);
     return 0;
 }
 
