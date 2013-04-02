@@ -112,6 +112,11 @@ Node *Find(List *list, char *content)
 {
     Node *tail = NULL, *temp1 = NULL, *temp2 = NULL;
     
+    if (list == NULL)
+    {
+        return NULL;
+    }
+    
     tail = list->tail;
     temp1 = list->head;
     temp2 = temp1->next;
@@ -166,6 +171,11 @@ void PrintList(List *list)
 void ReleaseList(List **list)
 {
     Node *temp = NULL, *tofree = NULL, *tail = NULL;
+    
+    if (*list == NULL)
+    {
+        return;
+    }
     
     temp = (*list)->head->next;
     tail = (*list)->tail;
