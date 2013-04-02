@@ -161,11 +161,9 @@ void PrintList(List *list)
     
     while (temp != tail)
     {
-        printf("%s ,", temp->content);
+        printf("<%s>\n", temp->content);
         temp = temp->next;
     }
-    
-    printf("\n");
 }
 
 void ReleaseList(List **list)
