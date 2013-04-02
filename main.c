@@ -7,18 +7,48 @@
 //
 
 #include <stdio.h>
+#include "cli.h"
 #include "lists.h"
 
 int main(int argc, const char * argv[])
 {
-    List *list = NULL;
+    List *cmnds = NULL;
+    char string[25];
     
-    AddNode(&list, "aaa");
-    AddNode(&list, "aab");
-    AddNode(&list, "aca");
-    DeleteNode(list, "acab");
-    PrintList(list);
-    ReleaseList(&list);
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    // do
+    {
+        ReleaseList(&cmnds);
+        scanf("%[^\n]", string);
+        CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
+        //CATCH_ERROR(Router(cmnds), errHandler);
+        PrintList(cmnds);
+    } //while (strcmp(cmnds->content, "quit") != 0);
+    
+    ReleaseList(&cmnds);
+    
     return 0;
+    
+errHandler:
+    switch (errorCode)
+    {
+        case ERRORCODE_QUOTES:
+            printf("QUOTES!!!");
+            break;
+            
+        case ERRORCODE_MEMORY_ALLOCATION_ERROR:
+            printf("You are out of memory :(");
+            break;
+            
+        case ERRORCODE_DONT_KNOW_COMMAND:
+            printf("Command not found :(");
+            break;
+            
+        default:
+            break;
+    };
+    return 1;
+
 }
 
