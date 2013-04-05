@@ -9,13 +9,23 @@
 #include <stdio.h>
 #include "cli.h"
 #include "lists.h"
+#include "sets.h"
 
 int main(int argc, const char * argv[])
 {
     List *cmnds = NULL;
-    char string[25];
+    char string[40];
     
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    Set *A = NULL;
+    
+    AddToSet(&A, "heelo");
+    AddToSet(&A, "bye");
+    AddToSet(&A, "heelo");
+    AddToSet(&A, "bye");
+
+    DeleteSet(&A);
     
     // do
     {
