@@ -19,6 +19,9 @@ int main(int argc, const char * argv[])
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
     Set *A = NULL, *B = NULL, *C = NULL;
+    CreateSetWithName(&A, "A");
+    CreateSetWithName(&B, "B");
+    CreateSetWithName(&C, "C");
     
     AddToSet(&A, "heelo");
     AddToSet(&B, "bye");

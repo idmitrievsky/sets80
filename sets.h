@@ -14,6 +14,7 @@
 
 typedef struct TagSet
 {
+    char *name;
     List *elems;
     struct TagSet *next;
 } Set;
@@ -34,5 +35,6 @@ ErrorCode Union(Set *A, Set *B, Set **C);
 ErrorCode Intersection(Set *A, Set *B, Set **C);
 ErrorCode SymmDifference(Set *A, Set *B, Set **C);
 ErrorCode Substract(Set *A, Set *B, Set **C);
+ErrorCode CreateSetWithName(Set **set, char* name);
 
 #endif
