@@ -499,8 +499,6 @@ errHandler:
     return errorCode;
 }
 
-
-
 ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B, Set **C), Set *A, Set *B)
 {
     Set *C = NULL;
@@ -543,5 +541,16 @@ void ReleaseSetList(SetList **setList)
     *setList = NULL;
 }
 
-
+void DeleteSetFrom(SetList *setList, char *name)
+{
+    Set *temp = NULL, *found = NULL;
+    
+    if ((temp = FindInSetList(setList, name)))
+    {
+        found = temp->next;
+        temp->next = found->next;
+        //free(found->content);
+        DeleteSet(&found);
+    }
+}
 

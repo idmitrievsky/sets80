@@ -32,6 +32,7 @@ int main(int argc, const char * argv[])
     AddSet(&L, A);
     AddEmptySet(&L, "A");
     AddSetCombination(&L, Union, A, B);
+    DeleteSetFrom(L, "AUB");
     AddSetCombination(&L, Union, A, B);
     ReleaseSetList(&L);
     
