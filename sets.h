@@ -37,4 +37,9 @@ ErrorCode SymmDifference(Set *A, Set *B, Set **C);
 ErrorCode Substract(Set *A, Set *B, Set **C);
 ErrorCode CreateSetWithName(Set **set, char* name);
 
+ErrorCode AddSet(SetList **_setList, Set *set);
+ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B, Set **C), Set *A, Set *B);
+ErrorCode AddEmptySet(SetList **_setList, char *name);
+void ReleaseSetList(SetList **setList);
+
 #endif

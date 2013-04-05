@@ -89,7 +89,7 @@ void DeleteSet(Set **set)
     }
     
     ReleaseList(&(*set)->elems);
-    free((*set)->name);
+    //free((*set)->name);
     free(*set);
     *set = NULL;
 }
@@ -383,3 +383,165 @@ errHandler:
     }
     return ERRORCODE_MEMORY_ALLOCATION_ERROR;
 }
+
+Set *FindInSetList(SetList *setList, char *name)
+{
+    Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
+    
+    if (setList == NULL)
+    {
+        return NULL;
+    }
+    
+    tail = setList->tail;
+    temp1 = setList->head;
+    temp2 = temp1->next;
+    
+    tail->name = name;
+    
+    while (strcmp(temp2->name, name))
+    {
+        temp1 = temp2;
+        temp2 = temp2->next;
+    }
+    if (temp2 == tail)
+    {
+        return NULL;
+    }
+    else
+    {
+        return temp1;
+    }
+}
+
+ErrorCode AddEmptySet(SetList **_setList, char *name)
+{
+    SetList *setList = NULL;
+    Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
+    Set *new = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    setList = *_setList;
+    
+    if (!setList)
+    {
+        CATCH_ERROR(CreateSetList(_setList), errHandler);
+    }
+    
+    setList = *_setList;
+    
+    tail = setList->tail;
+    temp1  = setList->head;
+    temp2 = temp1->next;
+    
+    if (FindInSetList(setList, name))
+    {
+        return ERRORCODE_ALREADY_EXISTS;
+    }
+    
+    tail->name = NULL;
+    
+    while (temp2 != setList->tail)
+    {
+        temp1 = temp2;
+        temp2 = temp2->next;
+    }
+    
+    CATCH_ERROR(CreateSetWithName(&new, name), errHandler);
+    new->next = temp2;
+    temp1->next = new;
+    
+    return ERRORCODE_NO_ERROR;
+    
+errHandler:
+    return errorCode;
+}
+
+ErrorCode AddSet(SetList **_setList, Set *set)
+{
+    SetList *setList = NULL;
+    Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    setList = *_setList;
+    
+    if (!setList)
+    {
+        CATCH_ERROR(CreateSetList(_setList), errHandler);
+    }
+    
+    setList = *_setList;
+    
+    tail = setList->tail;
+    temp1  = setList->head;
+    temp2 = temp1->next;
+    
+    if (FindInSetList(setList, set->name))
+    {
+        return ERRORCODE_ALREADY_EXISTS;
+    }
+    
+    tail->name = NULL;
+    
+    while (temp2 != setList->tail)
+    {
+        temp1 = temp2;
+        temp2 = temp2->next;
+    }
+    
+    
+    set->next = temp2;
+    temp1->next = set;
+    
+    return ERRORCODE_NO_ERROR;
+    
+errHandler:
+    return errorCode;
+}
+
+
+
+ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B, Set **C), Set *A, Set *B)
+{
+    Set *C = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+
+    CATCH_ERROR(Op(A, B, &C), errHandler);
+    CATCH_ERROR(AddSet(_setList, C), errHandler);
+    
+    return ERRORCODE_NO_ERROR;
+    
+    errHandler:
+        if (C != NULL)
+        {
+            DeleteSet(&C);
+        }
+        return errorCode;
+}
+
+void ReleaseSetList(SetList **setList)
+{
+    Set *temp = NULL, *tofree = NULL, *tail = NULL;
+    
+    if (*setList == NULL)
+    {
+        return;
+    }
+    
+    temp = (*setList)->head->next;
+    tail = (*setList)->tail;
+    
+    while (temp != tail)
+    {
+        tofree = temp;
+        temp = temp->next;
+        DeleteSet(&tofree);
+    }
+    DeleteSet(&tail);
+    DeleteSet(&((*setList)->head));
+    free(*setList);
+    *setList = NULL;
+}
+
+
+

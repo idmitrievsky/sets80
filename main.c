@@ -19,6 +19,7 @@ int main(int argc, const char * argv[])
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
     Set *A = NULL, *B = NULL, *C = NULL;
+    SetList *L = NULL;
     CreateSetWithName(&A, "A");
     CreateSetWithName(&B, "B");
     CreateSetWithName(&C, "C");
@@ -27,9 +28,12 @@ int main(int argc, const char * argv[])
     AddToSet(&B, "bye");
     AddToSet(&B, "addit");
     AddToSet(&A, "bye");
-    Substract(A, B, &C);
-
-    DeleteSet(&A);
+    
+    AddSet(&L, A);
+    AddEmptySet(&L, "A");
+    AddSetCombination(&L, Union, A, B);
+    AddSetCombination(&L, Union, A, B);
+    ReleaseSetList(&L);
     
     // do
     {
