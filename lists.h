@@ -30,8 +30,9 @@ Node *Find(List *list, char *content);
 void DeleteNode(List *list, char *content);
 void PrintList(List *list);
 void ReleaseList(List **list);
-int isBefore(Node *node1, Node *node2);
-Node *nextNode(Node *node);
-int isTail(List *list, Node *node);
+int IsBefore(Node *node1, Node *node2);
+Node *NextNode(Node *node);
+int IsTailOf(Node *node, List *list);
+ErrorCode AppendToFrom(List **to, Node *start, List *from);
 
 #endif

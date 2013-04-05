@@ -201,19 +201,38 @@ void ReleaseList(List **list)
     *list = NULL;
 }
 
-int isBefore(Node *node1, Node *node2)
+int IsBefore(Node *node1, Node *node2)
 {
-    return (strcmp(node1->content, node2->content));
+    return (strcmp(node1->content, node2->content) < 0);
 }
 
-Node *nextNode(Node *node)
+Node *NextNode(Node *node)
 {
     return node->next;
 }
 
-int isTail(List *list, Node *node)
+int IsTailOf(Node *node, List *list)
 {
     return (node == list->tail);
+}
+
+ErrorCode AppendToFrom(List **to, Node *start, List *from)
+{
+    Node *node = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    node = start;
+    
+    while (!IsTailOf(node, from))
+    {
+        CATCH_ERROR(AddNode(to, node->content), errHandler);
+        node = NextNode(node);
+    }
+    
+    return ERRORCODE_NO_ERROR;
+    
+    errHandler:
+        return errorCode;
 }
 
 
