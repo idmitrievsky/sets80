@@ -18,12 +18,13 @@ int main(int argc, const char * argv[])
     
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
-    Set *A = NULL;
+    Set *A = NULL, *B = NULL, *C = NULL;
     
     AddToSet(&A, "heelo");
+    AddToSet(&B, "bye");
+    AddToSet(&B, "addit");
     AddToSet(&A, "bye");
-    AddToSet(&A, "heelo");
-    AddToSet(&A, "bye");
+    Substract(A, B, &C);
 
     DeleteSet(&A);
     

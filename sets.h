@@ -28,4 +28,11 @@ ErrorCode AddToSet(Set **A, char *string);
 ErrorCode DeleteFromSet(Set *A, char *string);
 void DeleteSet(Set **set);
 
+int IsSubset(Set *A, Set *B);
+int IsMember(char *string, Set *A);
+ErrorCode Union(Set *A, Set *B, Set **C);
+ErrorCode Intersection(Set *A, Set *B, Set **C);
+ErrorCode SymmDifference(Set *A, Set *B, Set **C);
+ErrorCode Substract(Set *A, Set *B, Set **C);
+
 #endif
