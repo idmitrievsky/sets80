@@ -45,10 +45,7 @@ ErrorCode AddToSet(Set **A, char *string)
     
     set = *A;
     
-    if (!Find(set->elems, string))
-    {
-        CATCH_ERROR(AddNode(&(set->elems), string), errHandler);
-    }
+    CATCH_ERROR(AddNode(&(set->elems), string), errHandler);
     
     return ERRORCODE_NO_ERROR;
     
@@ -79,6 +76,10 @@ void DeleteSet(Set **set)
     free(*set);
     *set = NULL;
 }
+
+
+
+
 
 
 

@@ -72,9 +72,14 @@ ErrorCode AddNode(List **_list, char *content)
     temp1  = list->head;
     temp2 = temp1->next;
     
-    tail->content = NULL;
+    if (Find(list, content))
+    {
+        return ERRORCODE_NO_ERROR;
+    }
     
-    while (temp2->content != NULL)
+    tail->content = content;
+    
+    while (strcmp(temp2->content, content) < 0)
     {
         temp1 = temp2;
         temp2 = temp2->next;
