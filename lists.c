@@ -98,6 +98,11 @@ int Length(List *list)
     int i = 0;
     Node *temp = NULL;
     
+    if (!list)
+    {
+        return 0;
+    }
+    
     temp = list->head;
     
     while (temp)
