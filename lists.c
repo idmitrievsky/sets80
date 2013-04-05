@@ -201,7 +201,20 @@ void ReleaseList(List **list)
     *list = NULL;
 }
 
+int isBefore(Node *node1, Node *node2)
+{
+    return (strcmp(node1->content, node2->content));
+}
 
+Node *nextNode(Node *node)
+{
+    return node->next;
+}
+
+int isTail(List *list, Node *node)
+{
+    return (node == list->tail);
+}
 
 
 
