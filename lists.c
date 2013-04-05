@@ -188,6 +188,7 @@ void ReleaseList(List **list)
     free(tail);
     free((*list)->head);
     free(*list);
+    *list = NULL;
 }
 
 
