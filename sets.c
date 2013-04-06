@@ -115,6 +115,7 @@ int Cardinality(Set *A)
 
 int IsSubset(Set *A, Set *B)
 {
+    int ans = 0;
     Node *elemA = NULL, *elemB = NULL;
     
     elemA = Select(A);
@@ -124,6 +125,7 @@ int IsSubset(Set *A, Set *B)
     {
         if (IsBefore(elemA, elemB))
         {
+            printf("%s\n", "No");
             return 0;
         }
         else if (IsBefore(elemB, elemA))
@@ -136,7 +138,10 @@ int IsSubset(Set *A, Set *B)
             elemB = NextNode(elemB);
         }
     }
-    return IsLastIn(elemA, A);
+    
+    ans = IsLastIn(elemA, A);
+    printf("%s\n", ans ? "Yes" : "No");
+    return ans;
 }
 
 int IsMember(char *string, Set *A)
