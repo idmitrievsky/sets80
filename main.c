@@ -29,7 +29,8 @@ int main(int argc, const char * argv[])
         endOfFile = ReadStringFromStream(stdin, &string);
         CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
         CATCH_ERROR(Route(cmnds), errHandler);
-        PrintList(cmnds);
+        //PrintList(cmnds);
+        printf("All OK\n");
         
         errHandler:
         switch (errorCode)
