@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 dmitrievsky. All rights reserved.
 //
 
-#include <stdio.h>
 #include "cli.h"
 #include "lists.h"
 #include "sets.h"
@@ -30,7 +29,6 @@ int main(int argc, const char * argv[])
         endOfFile = ReadStringFromStream(stdin, &string);
         CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
         CATCH_ERROR(Route(cmnds, &quit), errHandler);
-        //PrintList(cmnds);
         
         errHandler:
         PrintErrorFeedback(errorCode);
