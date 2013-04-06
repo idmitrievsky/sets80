@@ -15,5 +15,6 @@
 #define STREAM_STRING_SIZE 20 // initialistion size for stringForInput (its size always multiples of STREAM_STRING_SIZE)
 
 ErrorCode ReadStringFromStream(FILE *stream, char **pointerToStringForInput);
+ErrorCode InitInput(char **string);
 
 #endif
