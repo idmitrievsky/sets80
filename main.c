@@ -10,6 +10,7 @@
 #include "cli.h"
 #include "lists.h"
 #include "sets.h"
+#include "methods.h"
 
 int main(int argc, const char * argv[])
 {
@@ -18,34 +19,17 @@ int main(int argc, const char * argv[])
     
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
-    Set *A = NULL, *B = NULL, *C = NULL;
-    SetList *L = NULL;
-    CreateSetWithName(&A, "A");
-    CreateSetWithName(&B, "B");
-    CreateSetWithName(&C, "C");
-    
-    AddToSet(&A, "heelo");
-    AddToSet(&B, "bye");
-    AddToSet(&B, "addit");
-    AddToSet(&A, "bye");
-    
-    AddSet(&L, A);
-    AddEmptySet(&L, "A");
-    AddSetCombination(&L, Union, A, B);
-    DeleteSetFrom(L, "AUB");
-    AddSetCombination(&L, Union, A, B);
-    ReleaseSetList(&L);
-    
     // do
     {
         ReleaseList(&cmnds);
         scanf("%[^\n]", string);
         CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
-        //CATCH_ERROR(Router(cmnds), errHandler);
+        CATCH_ERROR(Route(cmnds), errHandler);
         PrintList(cmnds);
     } //while (strcmp(cmnds->content, "quit") != 0);
     
     ReleaseList(&cmnds);
+    Exit();
     
     return 0;
     

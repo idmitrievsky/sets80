@@ -1,0 +1,3 @@
+X(CREATE, "create", Create, "Create a set")
+X(DELETE, "delete", Delete, "Delete a set")
+X(EMPT, "", Empty, "")
