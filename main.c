@@ -11,24 +11,31 @@
 #include "lists.h"
 #include "sets.h"
 #include "methods.h"
+#include "infinitestring.h"
 
 int main(int argc, const char * argv[])
 {
     List *cmnds = NULL;
-    char string[40];
+    char *string = NULL;
     
-    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR, endOfFile = ERRORCODE_NO_ERROR;
     
-    // do
+    CATCH_ERROR(InitInput(&string), errHandler);
+    MEM(string, errHandler);
+    
+    while (endOfFile == ERRORCODE_NO_ERROR)
     {
         ReleaseList(&cmnds);
-        scanf("%[^\n]", string);
+        endOfFile = ReadStringFromStream(stdin, &string);
         CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
         CATCH_ERROR(Route(cmnds), errHandler);
         PrintList(cmnds);
-    } //while (strcmp(cmnds->content, "quit") != 0);
+    }
+    
+    CATCH_ERROR(endOfFile, errHandler);
     
     ReleaseList(&cmnds);
+    ReleaseInput(string);
     Exit();
     
     return 0;
@@ -51,6 +58,9 @@ errHandler:
         default:
             break;
     };
+    ReleaseList(&cmnds);
+    ReleaseInput(string);
+    Exit();
     return 1;
 
 }
