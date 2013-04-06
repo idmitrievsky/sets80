@@ -21,5 +21,6 @@ typedef enum
 #undef X
 
 void PrintErrorFeedback(ErrorCode errorCode);
+void PrintMethodsHelp(char *string);
 
 #endif

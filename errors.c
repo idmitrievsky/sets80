@@ -20,3 +20,8 @@ void PrintErrorFeedback(ErrorCode errorCode)
 {
     printf("%s", errorTexts[errorCode]);
 }
+
+void PrintMethodsHelp(char *string)
+{
+    printf("%s\n", string);
+}
