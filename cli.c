@@ -24,6 +24,14 @@ ErrorCode Tokenize(char *string, List **result)
     
     *result = NULL;
     
+    if (strlen(string) == 0)
+    {
+        temp = malloc(1);
+        MEM(temp, errHandler);
+        CATCH_ERROR(AddNodeToEndForced(result, temp), errHandler);
+        return ERRORCODE_NO_ERROR;
+    }
+    
     for (i = 0; i < strlen(string); i++)
     {
         if (string[i] == '"')
