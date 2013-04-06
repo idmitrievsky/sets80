@@ -35,5 +35,6 @@ int IsBefore(Node *node1, Node *node2);
 Node *NextNode(Node *node);
 int IsTailOf(Node *node, List *list);
 ErrorCode AppendToFrom(List **to, Node *start, List *from);
+ErrorCode AppendToFromForced(List **to, Node *start, List *from);
 
 #endif

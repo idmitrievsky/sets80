@@ -286,8 +286,27 @@ ErrorCode AppendToFrom(List **to, Node *start, List *from)
     
     return ERRORCODE_NO_ERROR;
     
-    errHandler:
-        return errorCode;
+errHandler:
+    return errorCode;
+}
+
+ErrorCode AppendToFromForced(List **to, Node *start, List *from)
+{
+    Node *node = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    node = start;
+    
+    while (!IsTailOf(node, from))
+    {
+        CATCH_ERROR(AddNodeToEndForced(to, node->content), errHandler);
+        node = NextNode(node);
+    }
+    
+    return ERRORCODE_NO_ERROR;
+    
+errHandler:
+    return errorCode;
 }
 
 
