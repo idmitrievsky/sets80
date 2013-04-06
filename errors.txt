@@ -7,3 +7,4 @@ X(ERRORCODE_DONT_KNOW_COMMAND, "There is no such command, see <help> for more\n"
 X(ERRORCODE_ALREADY_EXISTS, "Set with this name already exists\n")
 X(ERRORCODE_WRONG_NUMBER_OF_ARGS, "This command takes another number of arguments, see <help> for more\n")
 X(ERRORCODE_NO_SUCH_SET, "You're referring to set which doesn't exist\n")
+X(ERRORCODE_EMPTY_COMMAND, "See <help> for usage\n")

@@ -1,4 +1,6 @@
 X(CREATE, "create", Create, "Create a set")
 X(DELETE, "delete", Delete, "Delete a set")
 X(VIEW, "view", View, "View all kinds of things")
-X(EMPT, "", Empty, "")
+X(CARD, "card", Card, "Set cardinality")
+X(EMPTY, "", Empty, "")
+X(END, "~END", End, "")
