@@ -13,17 +13,13 @@
 #define CATCH_ERROR(e, label) { ErrorCode cearg = e; errorCode = cearg; if (cearg != ERRORCODE_NO_ERROR) { goto label; } else {}}
 #define MEM(pointer, label) {if (pointer == NULL) { goto label; } else {}}
 
+#define X(a, b) a,
 typedef enum
 {
-    ERRORCODE_EOF,
-    ERRORCODE_QUOTES,
-    ERRORCODE_NO_ERROR,
-    ERRORCODE_MEMORY_ALLOCATION_ERROR,
-    ERRORCODE_TOO_LONG_STRING,
-    ERRORCODE_DONT_KNOW_COMMAND,
-    ERRORCODE_ALREADY_EXISTS,
-    ERRORCODE_WRONG_NUMBER_OF_ARGS
+#include "errors.txt"
 } ErrorCode;
+#undef X
 
+void PrintErrorFeedback(ErrorCode errorCode);
 
 #endif
