@@ -1,6 +1,6 @@
 X(ERRORCODE_EOF, "\n")
 X(ERRORCODE_QUOTES, "Quotes doesn't match\n")
-X(ERRORCODE_NO_ERROR, "All OK\n")
+X(ERRORCODE_NO_ERROR, "—————\n")
 X(ERRORCODE_MEMORY_ALLOCATION_ERROR, "Memory error occured\n")
 X(ERRORCODE_TOO_LONG_STRING, "Elemets must be under 80 symbols\n")
 X(ERRORCODE_DONT_KNOW_COMMAND, "There is no such command, see <help> for more\n")
