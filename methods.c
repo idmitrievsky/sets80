@@ -47,13 +47,37 @@ errHandler:
     return errorCode;
 }
 
-ErrorCode Delete(List *list)
+ErrorCode Delete(List *args)
 {
+    if (Length(args) != 1)
+    {
+        return ERRORCODE_WRONG_NUMBER_OF_ARGS;
+    }
+    DeleteSetFrom(ListOfSets, args->head->next->content);
+    
     return ERRORCODE_NO_ERROR;
 }
+
 ErrorCode Empty(List *list)
 {
     return ERRORCODE_NO_ERROR;
+}
+
+ErrorCode View(List *args)
+{
+    if (Length(args) == 0)
+    {
+        PrintSetList(ListOfSets);
+        return ERRORCODE_NO_ERROR;
+    }
+    
+    if (Length(args) == 1)
+    {
+        PrintList((FindInSetList(ListOfSets, args->head->next->content))->next->elems);
+        return ERRORCODE_NO_ERROR;
+    }
+    
+    return ERRORCODE_WRONG_NUMBER_OF_ARGS;
 }
 
 #define X(a, b, c, d) c,

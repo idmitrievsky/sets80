@@ -42,5 +42,7 @@ ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B,
 ErrorCode AddEmptySet(SetList **_setList, char *name);
 void ReleaseSetList(SetList **setList);
 void DeleteSetFrom(SetList *setList, char *name);
+Set *FindInSetList(SetList *setList, char *name);
+void PrintSetList(SetList *setList);
 
 #endif

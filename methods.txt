@@ -1,3 +1,4 @@
 X(CREATE, "create", Create, "Create a set")
 X(DELETE, "delete", Delete, "Delete a set")
+X(VIEW, "view", View, "View all kinds of things")
 X(EMPT, "", Empty, "")
