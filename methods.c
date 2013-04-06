@@ -31,13 +31,6 @@ char *commands_names[] =
 };
 #undef X
 
-#define X(a, b, c, d) d,
-char *helpNotes[] =
-{
-#include "methods.txt"
-};
-#undef X
-
 ErrorCode MCreate(List *args)
 {
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
@@ -321,22 +314,6 @@ errHandler:
 ErrorCode MQuit(List *args)
 {
     return ERRORCODE_NO_ERROR;
-}
-
-ErrorCode MHelp(List *args)
-{
-    Commands command = 0;
-    
-    if (Length(args) == 0)
-    {
-        while (strcmp(commands_names[EMPTY], commands_names[command]))
-        {
-            PrintMethodsHelp(helpNotes[command]);
-            command++;
-        }
-        return ERRORCODE_NO_ERROR;
-    }
-    return ERRORCODE_WRONG_NUMBER_OF_ARGS;
 }
 
 #define X(a, b, c, d) c,
