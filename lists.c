@@ -94,8 +94,50 @@ ErrorCode AddNode(List **_list, char *content)
     
     return ERRORCODE_NO_ERROR;
     
-    errHandler:
-        return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+errHandler:
+    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+}
+
+
+ErrorCode AddNodeToEndForced(List **_list, char *content)
+{
+    List *list = NULL;
+    Node *tail = NULL, *temp1 = NULL, *temp2 = NULL;
+    Node *new = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    list = *_list;
+    
+    if (!list)
+    {
+        CATCH_ERROR(CreateList(_list), errHandler);
+    }
+    
+    list = *_list;
+    
+    tail = list->tail;
+    temp1  = list->head;
+    temp2 = temp1->next;
+    
+    tail->content = content;
+    
+    while (temp2 != tail)
+    {
+        temp1 = temp2;
+        temp2 = temp2->next;
+    }
+    
+    new = malloc(sizeof(Node));
+    MEM(new, errHandler);
+    
+    new->content = content;
+    new->next = temp2;
+    temp1->next = new;
+    
+    return ERRORCODE_NO_ERROR;
+    
+errHandler:
+    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
 }
 
 int Length(List *list)
@@ -113,6 +155,7 @@ int Length(List *list)
     while (temp)
     {
         i++;
+        temp = temp->next;
     }
     
     return i - 2;

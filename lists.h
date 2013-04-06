@@ -25,6 +25,7 @@ typedef struct TagList
 
 ErrorCode CreateList(List **list);
 ErrorCode AddNode(List **_list, char *content);
+ErrorCode AddNodeToEndForced(List **_list, char *content);
 int Length(List *list);
 Node *Find(List *list, char *content);
 void DeleteNode(List *list, char *content);
