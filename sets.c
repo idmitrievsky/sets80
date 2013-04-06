@@ -550,7 +550,6 @@ void DeleteSetFrom(SetList *setList, char *name)
     {
         found = temp->next;
         temp->next = found->next;
-        //free(found->content);
         DeleteSet(&found);
     }
 }
