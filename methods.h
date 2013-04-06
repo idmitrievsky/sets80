@@ -9,7 +9,7 @@
 #ifndef Sets_methods_c
 #define Sets_methods_c
 
-ErrorCode Route(List *list);
+ErrorCode Route(List *list, int *quit);
 void Exit();
 
 #endif
