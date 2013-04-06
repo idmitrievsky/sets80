@@ -60,7 +60,7 @@ ErrorCode Tokenize(char *string, List **result)
                     temp[string + i - begin] = '\0'; // terminating string
                     // if this space is just after closing quote then we can delete that
                     if (temp[string + i - begin - 1] == '"') { temp[string + i - begin - 1] = '\0'; }
-                    CATCH_ERROR(AddNode(result, temp), errHandler);
+                    CATCH_ERROR(AddNodeToEndForced(result, temp), errHandler);
                 }
                 space = 1; // we can be in a sequence of spaces
             }
@@ -87,7 +87,7 @@ ErrorCode Tokenize(char *string, List **result)
         memcpy(temp, begin, string + i - begin );
         temp[string + i - begin] = '\0';
         if (temp[string + i - begin - 1] == '"') { temp[string + i - begin - 1] = '\0'; }
-        CATCH_ERROR(AddNode(result, temp), errHandler);
+        CATCH_ERROR(AddNodeToEndForced(result, temp), errHandler);
     }
     
     // if quotes doesn't match, then final word is from last opening quote 'til the end of a sting
@@ -100,22 +100,3 @@ errHandler:
     }
     return ERRORCODE_MEMORY_ALLOCATION_ERROR;
 }
-
-//ErrorCode Router(List *list)
-//{
-//    Method method = NULL;
-//    char *string;
-//    ErrorCode errorCode = ERRORCODE_NO_ERROR;
-//    
-//    string = list->content;
-//    
-//    if ((method = FindMatch(string)))
-//    {
-//        CATCH_ERROR(method(list->next), errHandler);
-//    }
-//    
-//    return ERRORCODE_NO_ERROR;
-//    
-//errHandler:
-//    return errorCode;
-//}

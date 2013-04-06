@@ -13,6 +13,5 @@
 #include "lists.h"
 
 ErrorCode Tokenize(char *string, List **result);
-ErrorCode Router(List *list);
 
 #endif
