@@ -16,5 +16,6 @@
 
 ErrorCode ReadStringFromStream(FILE *stream, char **pointerToStringForInput);
 ErrorCode InitInput(char **string);
+void ReleaseInput(char *string);
 
 #endif

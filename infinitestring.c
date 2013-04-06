@@ -65,4 +65,9 @@ errHandler:
     return ERRORCODE_MEMORY_ALLOCATION_ERROR;
 }
 
+void ReleaseInput(char *string)
+{
+    free(string);
+}
+
 
