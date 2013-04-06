@@ -208,9 +208,21 @@ void PrintList(List *list)
 {
     Node *temp = NULL, *tail = NULL;
     
+    if (!list)
+    {
+        printf("No elements yet\n");
+        return;
+    }
+    
     tail = list->tail;
     
     temp = list->head->next;
+    
+    if (temp == tail)
+    {
+        printf("No elements yet\n");
+        return;
+    }
     
     while (temp != tail)
     {

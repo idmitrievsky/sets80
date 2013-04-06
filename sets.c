@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "sets.h"
 
 ErrorCode CreateSet(Set **set)
@@ -551,6 +552,33 @@ void DeleteSetFrom(SetList *setList, char *name)
         temp->next = found->next;
         //free(found->content);
         DeleteSet(&found);
+    }
+}
+
+void PrintSetList(SetList *setList)
+{
+    Set *temp = NULL, *tail = NULL;
+    
+    if (!setList)
+    {
+        printf("No sets yet\n");
+        return;
+    }
+    
+    tail = setList->tail;
+    
+    temp = setList->head->next;
+    
+    if (temp == tail)
+    {
+        printf("No sets yet\n");
+        return;
+    }
+    
+    while (temp != tail)
+    {
+        printf("<%s>\n", temp->name);
+        temp = temp->next;
     }
 }
 
