@@ -28,6 +28,7 @@ ErrorCode Tokenize(char *string, List **result)
     {
         temp = malloc(1);
         MEM(temp, errHandler);
+        memcpy(temp, string, 1);
         CATCH_ERROR(AddNodeToEndForced(result, temp), errHandler);
         return ERRORCODE_NO_ERROR;
     }
