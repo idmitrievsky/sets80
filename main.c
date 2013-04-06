@@ -30,38 +30,36 @@ int main(int argc, const char * argv[])
         CATCH_ERROR(Tokenize(string, &cmnds), errHandler);
         CATCH_ERROR(Route(cmnds), errHandler);
         PrintList(cmnds);
+        
+        errHandler:
+        switch (errorCode)
+        {
+            case ERRORCODE_QUOTES:
+                printf("QUOTES!!!\n");
+                break;
+                
+            case ERRORCODE_MEMORY_ALLOCATION_ERROR:
+                printf("You are out of memory :(\n");
+                break;
+                
+            case ERRORCODE_DONT_KNOW_COMMAND:
+                printf("Command not found :(\n");
+                break;
+
+            case ERRORCODE_WRONG_NUMBER_OF_ARGS:
+                printf("Wrong usage :(\n");
+                break;
+
+            default:
+                break;
+        };
+
     }
-    
-    CATCH_ERROR(endOfFile, errHandler);
     
     ReleaseList(&cmnds);
     ReleaseInput(string);
     Exit();
     
     return 0;
-    
-errHandler:
-    switch (errorCode)
-    {
-        case ERRORCODE_QUOTES:
-            printf("QUOTES!!!");
-            break;
-            
-        case ERRORCODE_MEMORY_ALLOCATION_ERROR:
-            printf("You are out of memory :(");
-            break;
-            
-        case ERRORCODE_DONT_KNOW_COMMAND:
-            printf("Command not found :(");
-            break;
-            
-        default:
-            break;
-    };
-    ReleaseList(&cmnds);
-    ReleaseInput(string);
-    Exit();
-    return 1;
-
 }
 
