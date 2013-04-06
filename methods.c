@@ -260,6 +260,62 @@ errHandler:
     return errorCode;
 }
 
+ErrorCode MSubstract(List *args)
+{
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    char *name1 = NULL, *name2 = NULL, *newName = NULL;
+    Set *found1 = NULL, *found2 = NULL;
+    
+    
+    if (Length(args) == 3)
+    {
+        name1 = args->head->next->content;
+        name2 = args->head->next->next->content;
+        newName = args->head->next->next->next->content;
+        CATCH_ERROR(FindInSetListExact(ListOfSets, name1, &found1), errHandler);
+        CATCH_ERROR(FindInSetListExact(ListOfSets, name2, &found2), errHandler);
+        if (FindInSetList(ListOfSets, newName))
+        {
+            return ERRORCODE_ALREADY_EXISTS;
+        }
+        CATCH_ERROR(AddSetCombination(&ListOfSets, Substract, found1, found2, newName), errHandler);
+        return ERRORCODE_NO_ERROR;
+    }
+    
+    return ERRORCODE_WRONG_NUMBER_OF_ARGS;
+    
+errHandler:
+    return errorCode;
+}
+
+ErrorCode MContains(List *args)
+{
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    char *name1 = NULL, *name2 = NULL;
+    Set *found1 = NULL, *found2 = NULL;
+    
+    
+    if (Length(args) == 2)
+    {
+        name1 = args->head->next->content;
+        name2 = args->head->next->next->content;
+        CATCH_ERROR(FindInSetListExact(ListOfSets, name1, &found1), errHandler);
+        CATCH_ERROR(FindInSetListExact(ListOfSets, name2, &found2), errHandler);
+        IsSubset(found2, found1);
+        return ERRORCODE_NO_ERROR;
+    }
+    
+    return ERRORCODE_WRONG_NUMBER_OF_ARGS;
+    
+errHandler:
+    return errorCode;
+}
+
+ErrorCode MQuit(List *args)
+{
+    return ERRORCODE_NO_ERROR;
+}
+
 #define X(a, b, c, d) c,
 Method methods[] =
 {
@@ -267,7 +323,7 @@ Method methods[] =
 };
 #undef X
 
-ErrorCode Route(List *list)
+ErrorCode Route(List *list, int *quit)
 {
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     Commands command = 0;
@@ -276,7 +332,7 @@ ErrorCode Route(List *list)
     
     methodName = list->head->next->content;
     
-    while (strcmp(commands_names[END], commands_names[command]) & strcmp(methodName, commands_names[command]))
+    while (strcmp(commands_names[END], commands_names[command]) && strcmp(methodName, commands_names[command]))
     {
         command++;
     }
@@ -284,6 +340,10 @@ ErrorCode Route(List *list)
     if (!strcmp(commands_names[END], commands_names[command]))
     {
         return ERRORCODE_DONT_KNOW_COMMAND;
+    }
+    else if (!strcmp(commands_names[QUIT], commands_names[command]))
+    {
+        *quit = 1;
     }
     else
     {
