@@ -11,24 +11,25 @@
 #include <stdio.h>
 #include "sets.h"
 
-ErrorCode CreateSet(Set **set)
+ErrorCode CreateSet(Set **set) // creates set with inited list of elems
 {
     Set *s = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
     s = malloc(sizeof(Set));
     MEM(s, errHandler);
     s->name = NULL;
-    CreateList(&(s->elems));
+    CATCH_ERROR(CreateList(&(s->elems)), errHandler);
     s->next = NULL;
     *set = s;
     
     return ERRORCODE_NO_ERROR;
     
     errHandler:
-        return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+        return errorCode;
 }
 
-ErrorCode CreateSetWithName(Set **set, char* name)
+ErrorCode CreateSetWithName(Set **set, char* name) // creates set with a given name
 {
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
@@ -40,10 +41,10 @@ ErrorCode CreateSetWithName(Set **set, char* name)
     return ERRORCODE_NO_ERROR;
     
     errHandler:
-        return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+        return errorCode;
 }
 
-ErrorCode AddToSet(Set **A, char *string)
+ErrorCode AddToSet(Set **A, char *string) // adds elem to set with respect to order
 {
     Set *set = NULL;
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
@@ -51,13 +52,6 @@ ErrorCode AddToSet(Set **A, char *string)
     if (strlen(string) > 80)
     {
         return ERRORCODE_TOO_LONG_STRING;
-    }
-    
-    set = *A;
-    
-    if (!set)
-    {
-        CATCH_ERROR(CreateSet(A), errHandler);
     }
     
     set = *A;
@@ -70,7 +64,33 @@ ErrorCode AddToSet(Set **A, char *string)
         return errorCode;
 }
 
-ErrorCode DeleteFromSet(Set *A, char *string)
+ErrorCode AddAfterElement(Set **A, Node *to, char *string, Node **added) // adds elem after <to> node, order should be kept manually!
+{
+    Set *set = NULL;
+    Node *newNode = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
+    set = *A;
+    
+    if (!to)
+    {
+        to = set->elems->head;
+    }
+    newNode = malloc(sizeof(Node));
+    MEM(newNode, errHandler);
+    newNode->next = to->next;
+    newNode->content = string;
+    to->next = newNode;
+    
+    *added = newNode;
+    
+    return ERRORCODE_NO_ERROR;
+    
+errHandler:
+    return errorCode;
+}
+
+ErrorCode DeleteFromSet(Set *A, char *string) // removes <string> from set
 {
     if (strlen(string) > 80)
     {
@@ -95,17 +115,17 @@ void DeleteSet(Set **set)
     *set = NULL;
 }
 
-int IsLastIn(Node *node, Set *set)
+int IsLastIn(Node *node, Set *set) // checks if elem is last in set
 {
     return IsTailOf(node, set->elems);
 }
 
-Node *Select(Set *set)
+Node *Select(Set *set) // picks first elem of set
 {
     return set->elems->head->next;
 }
 
-int Cardinality(Set *A)
+int Cardinality(Set *A) // calculates and prints to stdout # of set
 {
     int card = 0;
     
@@ -113,7 +133,7 @@ int Cardinality(Set *A)
     return card;
 }
 
-int IsSubset(Set *A, Set *B)
+int IsSubset(Set *A, Set *B) // checks and prints if A is a subset of B
 {
     int ans = 0;
     Node *elemA = NULL, *elemB = NULL;
@@ -144,7 +164,7 @@ int IsSubset(Set *A, Set *B)
     return ans;
 }
 
-int IsMember(char *string, Set *A)
+int IsMember(char *string, Set *A) // checks and prints if <string> is a member of A
 {
     int ans = 0;
     ans = !!(Find(A->elems, string));
@@ -152,8 +172,10 @@ int IsMember(char *string, Set *A)
     return ans;
 }
 
-ErrorCode NameSet(Set *set, char *name)
+ErrorCode NameSet(Set *set, char *name) // names existing set
 {
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
     set->name = malloc(strlen(name) + 1);
     MEM(set->name, errHandler);
     strcpy(set->name, name);
@@ -161,34 +183,39 @@ ErrorCode NameSet(Set *set, char *name)
     return ERRORCODE_NO_ERROR;
     
     errHandler:
-        return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+        return errorCode;
 }
 
-ErrorCode AddToFrom(Set **to, Node *start, Set *from)
+ErrorCode AddToFrom(Set **A, Node *to, Node *start, Set *from, Node **added) // adds all elems from <from> set starting with <start> to A set after <to>
 {
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    Node *node = NULL, *lastAdded = NULL;
     
-    if (*to == NULL)
+    node = start;
+    lastAdded = to;
+    
+    while (!IsLastIn(node, from))
     {
-        CATCH_ERROR(CreateSet(to), errHandler);
+        CATCH_ERROR(AddAfterElement(A, lastAdded, node->content, &lastAdded), errHandler);
+        node = node->next;
     }
-    CATCH_ERROR(AppendToFrom(&((*to)->elems), start, from->elems), errHandler);
     
     return ERRORCODE_NO_ERROR;
     
     errHandler:
-        DeleteSet(to);
         return errorCode;
 }
 
-ErrorCode Union(Set *A, Set *B, Set **C)
+ErrorCode Union(Set *A, Set *B, Set **C) // creates a union of A and B
 {
-    Node *elemA = NULL, *elemB = NULL, *elemC = NULL;
+    Node *elemA = NULL, *elemB = NULL, *elemC = NULL, *lastAdded = NULL;
     
     ErrorCode errorCode;
 
     elemA = Select(A);
     elemB = Select(B);
+    
+    CATCH_ERROR(CreateSet(C), errHandler);
     
     while (!IsLastIn(elemA, A) && !IsLastIn(elemB, B))
     {
@@ -208,10 +235,10 @@ ErrorCode Union(Set *A, Set *B, Set **C)
             elemA = NextNode(elemA);
             elemB = NextNode(elemB);
         }
-        CATCH_ERROR(AddToSet(C, elemC->content), errHandler);
+        CATCH_ERROR(AddAfterElement(C, lastAdded, elemC->content, &lastAdded), errHandler);
     }
-    CATCH_ERROR(AddToFrom(C, elemA, A), errHandler);
-    CATCH_ERROR(AddToFrom(C, elemB, B), errHandler);
+    CATCH_ERROR(AddToFrom(C, lastAdded, elemA, A, &lastAdded), errHandler);
+    CATCH_ERROR(AddToFrom(C, lastAdded, elemB, B, &lastAdded), errHandler);
     
     return ERRORCODE_NO_ERROR;
     
@@ -220,16 +247,17 @@ ErrorCode Union(Set *A, Set *B, Set **C)
         return errorCode;
 }
 
-ErrorCode Intersection(Set *A, Set *B, Set **C)
+ErrorCode Intersection(Set *A, Set *B, Set **C) // creates a intersection of A and B
 {
-    Node *elemA = NULL, *elemB = NULL;
+    Node *elemA = NULL, *elemB = NULL, *lastAdded = NULL;
     
     ErrorCode errorCode;
     
     elemA = Select(A);
     elemB = Select(B);
     
-    CreateSet(C);
+    CATCH_ERROR(CreateSet(C), errHandler);
+    
     while (!IsLastIn(elemA, A) && !IsLastIn(elemB, B))
     {
         if (IsBefore(elemA, elemB))
@@ -242,7 +270,7 @@ ErrorCode Intersection(Set *A, Set *B, Set **C)
         }
         else
         {
-            CATCH_ERROR(AddToSet(C, elemA->content), errHandler);
+            CATCH_ERROR(AddAfterElement(C, lastAdded, elemA->content, &lastAdded), errHandler);
             elemA = NextNode(elemA);
             elemB = NextNode(elemB);
         }
@@ -255,25 +283,27 @@ ErrorCode Intersection(Set *A, Set *B, Set **C)
         return errorCode;
 }
 
-ErrorCode SymmDifference(Set *A, Set *B, Set **C)
+ErrorCode SymmDifference(Set *A, Set *B, Set **C) // creates a symm difference of A and B
 {
-    Node *elemA = NULL, *elemB = NULL;
+    Node *elemA = NULL, *elemB = NULL, *lastAdded = NULL;
     
     ErrorCode errorCode;
     
     elemA = Select(A);
     elemB = Select(B);
     
+    CATCH_ERROR(CreateSet(C), errHandler);
+    
     while (!IsLastIn(elemA, A) && !IsLastIn(elemB, B))
     {
         if (IsBefore(elemA, elemB))
         {
-            CATCH_ERROR(AddToSet(C, elemA->content), errHandler);
+            CATCH_ERROR(AddAfterElement(C, lastAdded, elemA->content, &lastAdded), errHandler);
             elemA = NextNode(elemA);
         }
         else if (IsBefore(elemB, elemA))
         {
-            CATCH_ERROR(AddToSet(C, elemB->content), errHandler);
+            CATCH_ERROR(AddAfterElement(C, lastAdded, elemB->content, &lastAdded), errHandler);
             elemB = NextNode(elemB);
         }
         else
@@ -282,8 +312,8 @@ ErrorCode SymmDifference(Set *A, Set *B, Set **C)
             elemB = NextNode(elemB);
         }
     }
-    CATCH_ERROR(AddToFrom(C, elemA, A), errHandler);
-    CATCH_ERROR(AddToFrom(C, elemB, B), errHandler);
+    CATCH_ERROR(AddToFrom(C, lastAdded, elemA, A, &lastAdded), errHandler);
+    CATCH_ERROR(AddToFrom(C, lastAdded, elemB, B, &lastAdded), errHandler);
     
     return ERRORCODE_NO_ERROR;
     
@@ -294,18 +324,20 @@ ErrorCode SymmDifference(Set *A, Set *B, Set **C)
 
 ErrorCode Substract(Set *A, Set *B, Set **C)
 {
-    Node *elemA = NULL, *elemB = NULL;
+    Node *elemA = NULL, *elemB = NULL, *lastAdded = NULL;
     
     ErrorCode errorCode;
     
     elemA = Select(A);
     elemB = Select(B);
     
+    CATCH_ERROR(CreateSet(C), errHandler);
+    
     while (!IsLastIn(elemA, A) && !IsLastIn(elemB, B))
     {
         if (IsBefore(elemA, elemB))
         {
-            CATCH_ERROR(AddToSet(C, elemA->content), errHandler);
+            CATCH_ERROR(AddAfterElement(C, lastAdded, elemA->content, &lastAdded), errHandler);
             elemA = NextNode(elemA);
         }
         else if (IsBefore(elemB, elemA))
@@ -318,7 +350,7 @@ ErrorCode Substract(Set *A, Set *B, Set **C)
             elemB = NextNode(elemB);
         }
     }
-    CATCH_ERROR(AddToFrom(C, elemA, A), errHandler);
+    CATCH_ERROR(AddToFrom(C, lastAdded, elemA, A, &lastAdded), errHandler);
     
     return ERRORCODE_NO_ERROR;
     
@@ -327,8 +359,10 @@ ErrorCode Substract(Set *A, Set *B, Set **C)
         return errorCode;
 }
 
-ErrorCode CreateSetList(SetList **setList)
+ErrorCode CreateSetList(SetList **setList) // creates a setlist
 {
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
     SetList *sl = NULL;
     Set *h = NULL, *t = NULL;
     
@@ -364,10 +398,10 @@ errHandler:
     {
         free(*setList);
     }
-    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+    return errorCode;
 }
 
-Set *FindInSetList(SetList *setList, char *name)
+Set *FindInSetList(SetList *setList, char *name) // returns set before found, or nothing
 {
     Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
     
@@ -398,7 +432,7 @@ Set *FindInSetList(SetList *setList, char *name)
 }
 
 
-ErrorCode FindInSetListExact(SetList *setList, char *name, Set **found)
+ErrorCode FindInSetListExact(SetList *setList, char *name, Set **found) // founds exactly needed set
 {
     Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
     
@@ -430,7 +464,7 @@ ErrorCode FindInSetListExact(SetList *setList, char *name, Set **found)
     }
 }
 
-ErrorCode AddEmptySet(SetList **_setList, char *name)
+ErrorCode AddEmptySet(SetList **_setList, char *name) // creates and adds named empty set
 {
     SetList *setList = NULL;
     Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
@@ -473,7 +507,7 @@ errHandler:
     return errorCode;
 }
 
-ErrorCode AddSet(SetList **_setList, Set *set)
+ErrorCode AddSet(SetList **_setList, Set *set) // adds set
 {
     SetList *setList = NULL;
     Set *tail = NULL, *temp1 = NULL, *temp2 = NULL;
@@ -515,7 +549,7 @@ errHandler:
     return errorCode;
 }
 
-ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B, Set **C), Set *A, Set *B, char *newName)
+ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B, Set **C), Set *A, Set *B, char *newName) // adds set combination
 {
     Set *C = NULL;
     ErrorCode errorCode = ERRORCODE_NO_ERROR;
@@ -534,7 +568,7 @@ ErrorCode AddSetCombination(SetList **_setList, ErrorCode (*Op) (Set *A, Set *B,
         return errorCode;
 }
 
-void ReleaseSetList(SetList **setList)
+void ReleaseSetList(SetList **setList) // releases set list
 {
     Set *temp = NULL, *tofree = NULL, *tail = NULL;
     
@@ -558,7 +592,7 @@ void ReleaseSetList(SetList **setList)
     *setList = NULL;
 }
 
-void DeleteSetFrom(SetList *setList, char *name)
+void DeleteSetFrom(SetList *setList, char *name) // removes set from list
 {
     Set *temp = NULL, *found = NULL;
     
@@ -570,7 +604,7 @@ void DeleteSetFrom(SetList *setList, char *name)
     }
 }
 
-void PrintSetList(SetList *setList)
+void PrintSetList(SetList *setList) // prints set list
 {
     Set *temp = NULL, *tail = NULL;
     

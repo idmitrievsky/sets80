@@ -56,13 +56,15 @@ void AppendChar(char **tail, int c)
 
 ErrorCode InitInput(char **string)
 {
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+    
     *string = malloc(STREAM_STRING_SIZE);
     MEM(string, errHandler);
     
     return ERRORCODE_NO_ERROR;
     
 errHandler:
-    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+    return errorCode;
 }
 
 void ReleaseInput(char *string)

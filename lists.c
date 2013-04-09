@@ -12,10 +12,11 @@
 #include "errors.h"
 #include "lists.h"
 
-ErrorCode CreateList(List **list)
+ErrorCode CreateList(List **list) // creates a new list with head and tail
 {
     List *l = NULL;
     Node *h = NULL, *t = NULL;
+    ErrorCode errorCode = ERRORCODE_NO_ERROR;
     
     l = malloc(sizeof(List));
     MEM(l, errHandler);
@@ -49,10 +50,10 @@ ErrorCode CreateList(List **list)
         {
             free(*list);
         }
-        return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+        return errorCode;
 }
 
-ErrorCode AddNode(List **_list, char *content)
+ErrorCode AddNode(List **_list, char *content) // adds <content> to list IN ORDER, if it's already there — does nothing without error
 {
     List *list = NULL;
     Node *tail = NULL, *temp1 = NULL, *temp2 = NULL;
@@ -95,11 +96,11 @@ ErrorCode AddNode(List **_list, char *content)
     return ERRORCODE_NO_ERROR;
     
 errHandler:
-    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+    return errorCode;
 }
 
 
-ErrorCode AddNodeToEndForced(List **_list, char *content)
+ErrorCode AddNodeToEndForced(List **_list, char *content) // adds <content> to list's end (can create a duplicate)
 {
     List *list = NULL;
     Node *tail = NULL, *temp1 = NULL, *temp2 = NULL;
@@ -137,10 +138,10 @@ ErrorCode AddNodeToEndForced(List **_list, char *content)
     return ERRORCODE_NO_ERROR;
     
 errHandler:
-    return ERRORCODE_MEMORY_ALLOCATION_ERROR;
+    return errorCode;
 }
 
-int Length(List *list)
+int Length(List *list) // calculates length
 {
     int i = 0;
     Node *temp = NULL;
@@ -161,7 +162,7 @@ int Length(List *list)
     return i - 2;
 }
 
-Node *Find(List *list, char *content)
+Node *Find(List *list, char *content) // returns node before found if found, otherwise — NULL
 {
     Node *tail = NULL, *temp1 = NULL, *temp2 = NULL;
     
@@ -191,7 +192,7 @@ Node *Find(List *list, char *content)
     }
 }
 
-void DeleteNode(List *list, char *content)
+void DeleteNode(List *list, char *content) // removes node if found, otherwise does nothing
 {
     Node *temp = NULL, *found = NULL;
     
@@ -204,7 +205,7 @@ void DeleteNode(List *list, char *content)
     }
 }
 
-void PrintList(List *list)
+void PrintList(List *list) // prints list to stdout
 {
     Node *temp = NULL, *tail = NULL;
     
@@ -231,7 +232,7 @@ void PrintList(List *list)
     }
 }
 
-void ReleaseList(List **list)
+void ReleaseList(List **list) // removes list
 {
     Node *temp = NULL, *tofree = NULL, *tail = NULL;
     
@@ -256,39 +257,39 @@ void ReleaseList(List **list)
     *list = NULL;
 }
 
-int IsBefore(Node *node1, Node *node2)
+int IsBefore(Node *node1, Node *node2) // checking if node1 is before node2 in ORDERED list
 {
     return (strcmp(node1->content, node2->content) < 0);
 }
 
-Node *NextNode(Node *node)
+Node *NextNode(Node *node) // return next node
 {
     return node->next;
 }
 
-int IsTailOf(Node *node, List *list)
+int IsTailOf(Node *node, List *list) // checking if node is a tail of given list
 {
     return (node == list->tail);
 }
 
-ErrorCode AppendToFrom(List **to, Node *start, List *from)
-{
-    Node *node = NULL;
-    ErrorCode errorCode = ERRORCODE_NO_ERROR;
-    
-    node = start;
-    
-    while (!IsTailOf(node, from))
-    {
-        CATCH_ERROR(AddNode(to, node->content), errHandler);
-        node = NextNode(node);
-    }
-    
-    return ERRORCODE_NO_ERROR;
-    
-errHandler:
-    return errorCode;
-}
+//ErrorCode AppendToFrom(List **to, Node *start, List *from)
+//{
+//    Node *node = NULL;
+//    ErrorCode errorCode = ERRORCODE_NO_ERROR;
+//    
+//    node = start;
+//    
+//    while (!IsTailOf(node, from))
+//    {
+//        CATCH_ERROR(AddNode(to, node->content), errHandler);
+//        node = NextNode(node);
+//    }
+//    
+//    return ERRORCODE_NO_ERROR;
+//    
+//errHandler:
+//    return errorCode;
+//}
 
 ErrorCode AppendToFromForced(List **to, Node *start, List *from)
 {
