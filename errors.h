@@ -11,7 +11,7 @@
 
 #define MAX_ERROR_MESSAGE_SIZE 60 // ???
 #define CATCH_ERROR(e, label) { ErrorCode cearg = e; errorCode = cearg; if (cearg != ERRORCODE_NO_ERROR) { goto label; } else {}}
-#define MEM(pointer, label) {if (pointer == NULL) { goto label; } else {}}
+#define MEM(pointer, label) {if (pointer == NULL) { errorCode = ERRORCODE_MEMORY_ALLOCATION_ERROR; goto label; } else {}}
 
 #define X(a, b) a,
 typedef enum
