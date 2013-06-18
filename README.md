@@ -15,5 +15,5 @@ CLI for dealing with sets of strings less than 80 characters long.
 - `sdiff <set name> <set name> <set name>` — Create a new set, which is a symmetric difference of two first.
 - `sub <set name> <set name> <set name>` — Create a new set, which is a diffecrence between first and second.
 - `contains? <set name> <set name>` — View if second set is a subset of first one.
-- `quit` — quit application.
+- `quit` — Quit application.
 - `help` — View help.
